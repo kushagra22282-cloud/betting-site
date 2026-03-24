@@ -30,7 +30,6 @@
     }
     a { color: inherit; text-decoration: none; }
     .container { width: min(1200px, 92%); margin: 0 auto; }
-    .hidden { display: none !important; }
     .topbar {
       position: sticky; top: 0; z-index: 50;
       backdrop-filter: blur(14px);
@@ -41,14 +40,14 @@
       display: flex; align-items: center; justify-content: space-between; gap: 18px;
       padding: 16px 0;
     }
-    .brand { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 800; }
+    .brand { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 800; cursor: pointer; }
     .brand-badge {
       width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center;
       background: linear-gradient(135deg, var(--green), var(--cyan)); color: #04111d; font-size: 22px;
       box-shadow: 0 10px 28px rgba(16,214,223,0.25);
     }
     .nav-links { display: flex; gap: 18px; color: #d5e2ee; font-weight: 600; }
-    .nav-links a { opacity: 0.88; }
+    .nav-links a { opacity: 0.88; cursor: pointer; }
     .nav-links a:hover { opacity: 1; }
     .nav-actions { display: flex; gap: 12px; align-items: center; }
     .pill {
@@ -70,7 +69,7 @@
     .page.active { display: block; }
     .hero { padding: 52px 0 22px; }
     .hero-grid { display: grid; grid-template-columns: 1.35fr 0.85fr; gap: 22px; }
-    .card, .hero-card, .side-card, .match-card, .panel, .wallet-card, .table-card {
+    .card, .hero-card, .side-card, .match-card, .panel, .wallet-card {
       background: linear-gradient(180deg, rgba(16,28,45,0.96), rgba(8,16,28,0.98));
       border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius); box-shadow: var(--shadow);
     }
@@ -191,18 +190,18 @@
 <body>
   <div class="topbar">
     <div class="container nav">
-      <div class="brand" onclick="showPage('home')" style="cursor:pointer;">
+      <div class="brand" onclick="showPage('home')">
         <div class="brand-badge">🎯</div>
         <div>Game Of Skills</div>
       </div>
       <div class="nav-links">
-        <a href="#" onclick="showPage('home')">Home</a>
-        <a href="#" onclick="showPage('fantasy')">Fantasy</a>
-        <a href="#" onclick="showPage('dashboard')">Dashboard</a>
-        <a href="#" onclick="showPage('admin')">Admin</a>
+        <a onclick="showPage('home')">Home</a>
+        <a onclick="showPage('fantasy')">Fantasy</a>
+        <a onclick="showPage('dashboard')">Dashboard</a>
+        <a onclick="showPage('admin')">Admin</a>
       </div>
       <div class="nav-actions">
-        <div class="pill">Demo Account</div>
+        <div class="pill" id="topAccountPill">Guest Demo</div>
         <button class="btn btn-dark" onclick="showPage('login')">Login</button>
         <button class="btn btn-primary" onclick="showPage('register')">Register</button>
       </div>
@@ -215,18 +214,18 @@
         <div class="container hero-grid">
           <div class="hero-card">
             <div class="tag">⚡ Premium Demo Interface · Multi Page Layout</div>
-            <h1>A stronger sports demo with dashboard, wallet and admin look.</h1>
+            <h1>A stronger sports demo with dashboard, fantasy and admin look.</h1>
             <p>
-              This is a premium demo app version with homepage, login screen, wallet-style dashboard, history tables, match cards and admin-style pages.
+              This is a premium demo app version with homepage, login screen, fantasy builder, user dashboard, history tables and admin-style pages.
             </p>
             <div class="hero-actions">
               <button class="btn btn-primary" onclick="showPage('register')">Create Account</button>
-              <button class="btn btn-dark" onclick="showPage('dashboard')">Open Dashboard</button>
+              <button class="btn btn-dark" onclick="showPage('fantasy')">Open Fantasy</button>
             </div>
             <div class="stats">
               <div class="stat"><small>Live Matches</small><strong>126+</strong></div>
               <div class="stat"><small>Open Markets</small><strong>580+</strong></div>
-              <div class="stat"><small>Avg Response</small><strong>0.8s</strong></div>
+              <div class="stat"><small>Fantasy Users</small><strong>12.4K</strong></div>
             </div>
           </div>
           <div class="stack">
@@ -241,10 +240,10 @@
             </div>
             <div class="side-card">
               <h3>Quick Demo Actions</h3>
-              <div class="muted">Navigate through user panel and admin panel layouts.</div>
+              <div class="muted">Navigate through user panel and fantasy section layouts.</div>
               <div class="hero-actions" style="margin-top:16px; margin-bottom:0;">
-                <button class="btn btn-primary" onclick="showPage('dashboard')">User Panel</button>
-                <button class="btn btn-dark" onclick="showPage('admin')">Admin Panel</button>
+                <button class="btn btn-primary" onclick="showPage('fantasy')">Fantasy Builder</button>
+                <button class="btn btn-dark" onclick="showPage('dashboard')">User Panel</button>
               </div>
             </div>
           </div>
@@ -266,67 +265,35 @@
             <div class="match-card">
               <div class="league">Cricket</div>
               <div class="teams">India vs Australia</div>
-              <div class="meta">Today · 7:30 PM · Live Market</div>
+              <div class="meta">Today · 7:30 PM · Fantasy Match</div>
               <div class="odds">
-                <div class="odd"><span>India</span><strong>1.68</strong></div>
-                <div class="odd"><span>Draw</span><strong>2.25</strong></div>
-                <div class="odd"><span>Australia</span><strong>2.84</strong></div>
+                <div class="odd"><span>Top Pick</span><strong>Rohit</strong></div>
+                <div class="odd"><span>Captain</span><strong>Bumrah</strong></div>
+                <div class="odd"><span>Value Pick</span><strong>Gill</strong></div>
               </div>
-              <button class="btn btn-primary place-btn" onclick="showPage('dashboard')">Open Bet Slip Demo</button>
+              <button class="btn btn-primary place-btn" onclick="showPage('fantasy')">Build Team</button>
             </div>
             <div class="match-card">
               <div class="league">Football</div>
               <div class="teams">Manchester Utd vs Chelsea</div>
-              <div class="meta">Today · 10:00 PM · Premier League</div>
+              <div class="meta">Demo Preview · Upcoming</div>
               <div class="odds">
                 <div class="odd"><span>Home</span><strong>2.10</strong></div>
                 <div class="odd"><span>Draw</span><strong>3.05</strong></div>
                 <div class="odd"><span>Away</span><strong>2.72</strong></div>
               </div>
-              <button class="btn btn-primary place-btn" onclick="showPage('dashboard')">Open Bet Slip Demo</button>
+              <button class="btn btn-dark place-btn">Preview Only</button>
             </div>
             <div class="match-card">
               <div class="league">Tennis</div>
               <div class="teams">Nadal vs Djokovic</div>
-              <div class="meta">Tomorrow · 5:30 PM · ATP Tour</div>
+              <div class="meta">Demo Preview · Upcoming</div>
               <div class="odds">
                 <div class="odd"><span>Nadal</span><strong>1.95</strong></div>
                 <div class="odd"><span>3 Sets</span><strong>2.40</strong></div>
                 <div class="odd"><span>Djokovic</span><strong>1.88</strong></div>
               </div>
-              <button class="btn btn-primary place-btn" onclick="showPage('dashboard')">Open Bet Slip Demo</button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="container grid-2">
-          <div class="panel">
-            <h2>Included Demo Sections</h2>
-            <ul>
-              <li>Premium homepage</li>
-              <li>Login and register screens</li>
-              <li>User dashboard with wallet cards</li>
-              <li>Transaction history table</li>
-              <li>Bet history table</li>
-              <li>Admin overview panel</li>
-            </ul>
-          </div>
-          <div class="panel">
-            <h2>Next Upgrade Ideas</h2>
-            <ul>
-              <li>Add brand logo and colors</li>
-              <li>Add separate pages with routing later</li>
-              <li>Connect to backend in future</li>
-              <li>Replace sample matches with live data later</li>
-            </ul>
-            <div class="promo">
-              <div>
-                <div class="promo-title">Premium Demo Ready</div>
-                <div class="muted">A much stronger version than the basic single-page file.</div>
-              </div>
-              <button class="btn btn-primary" onclick="showPage('register')">Try Now</button>
+              <button class="btn btn-dark place-btn">Preview Only</button>
             </div>
           </div>
         </div>
@@ -339,11 +306,12 @@
           <h2>Welcome Back</h2>
           <div class="muted">Demo login screen for your platform.</div>
           <div class="form-grid">
-            <div><label>Email</label><input type="email" placeholder="Enter your email"></div>
-            <div><label>Password</label><input type="password" placeholder="Enter your password"></div>
-            <button class="btn btn-primary" onclick="showPage('dashboard')">Login</button>
+            <div><label>Email</label><input type="email" id="loginEmail" placeholder="Enter your email"></div>
+            <div><label>Password</label><input type="password" id="loginPassword" placeholder="Enter your password"></div>
+            <button class="btn btn-primary" onclick="loginDemoAccount()">Login</button>
           </div>
           <div class="auth-foot">New user? <span class="link-btn" onclick="showPage('register')">Create account</span></div>
+          <div class="auth-foot" id="loginMessage"></div>
         </div>
       </div>
     </section>
@@ -354,13 +322,13 @@
           <h2>Create Account</h2>
           <div class="muted">Premium demo registration layout.</div>
           <div class="form-grid">
-            <div><label>Full Name</label><input type="text" placeholder="Enter full name"></div>
-            <div><label>Email</label><input type="email" placeholder="Enter email"></div>
-            <div><label>Country</label><select><option>United Kingdom</option><option>India</option><option>Other</option></select></div>
-            <div><label>Password</label><input type="password" placeholder="Create password"></div>
-            <button class="btn btn-primary" onclick="showPage('dashboard')">Create Demo Account</button>
+            <div><label>Full Name</label><input type="text" id="registerName" placeholder="Enter full name"></div>
+            <div><label>Email</label><input type="email" id="registerEmail" placeholder="Enter email"></div>
+            <div><label>Password</label><input type="password" id="registerPassword" placeholder="Create password"></div>
+            <button class="btn btn-primary" onclick="registerDemoAccount()">Create Demo Account</button>
           </div>
           <div class="auth-foot">Already have one? <span class="link-btn" onclick="showPage('login')">Login</span></div>
+          <div class="auth-foot" id="registerMessage"></div>
         </div>
       </div>
     </section>
@@ -389,19 +357,19 @@
               <div class="match-card">
                 <div class="league">Mega Contest</div>
                 <div class="teams">10,000 Spots · 6,320 Joined</div>
-                <div class="meta">Entry: 49 Coins · 1st Prize: 5,000 Coins</div>
+                <div class="meta">Entry: 49 Demo Coins · 1st Prize: 5,000 Demo Coins</div>
                 <button class="btn btn-primary place-btn" onclick="joinContest('Mega Contest', 49)">Join Demo Contest</button>
               </div>
               <div class="match-card">
                 <div class="league">Head to Head</div>
                 <div class="teams">2 Spots · 1 Joined</div>
-                <div class="meta">Entry: 25 Coins · Winner Takes 45 Coins</div>
+                <div class="meta">Entry: 25 Demo Coins · Winner Takes 45 Demo Coins</div>
                 <button class="btn btn-primary place-btn" onclick="joinContest('Head to Head', 25)">Join Demo Contest</button>
               </div>
               <div class="match-card">
                 <div class="league">Winner Takes More</div>
                 <div class="teams">100 Spots · 42 Joined</div>
-                <div class="meta">Entry: 99 Coins · Top Prize: 1,200 Coins</div>
+                <div class="meta">Entry: 99 Demo Coins · Top Prize: 1,200 Demo Coins</div>
                 <button class="btn btn-primary place-btn" onclick="joinContest('Winner Takes More', 99)">Join Demo Contest</button>
               </div>
             </div>
@@ -410,7 +378,7 @@
             <h2>Leaderboard Preview</h2>
             <table style="margin-top:16px;">
               <thead><tr><th>Rank</th><th>User</th><th>Points</th><th>Status</th></tr></thead>
-              <tbody id="leaderboardBody">
+              <tbody>
                 <tr><td>#1</td><td>OliverJ</td><td>612</td><td><span class="status">Leading</span></td></tr>
                 <tr><td>#2</td><td>HarryS</td><td>598</td><td><span class="status">Hot</span></td></tr>
                 <tr><td>#3</td><td>You</td><td id="yourLeaderboardPoints">0</td><td><span class="status pending">Build Team</span></td></tr>
@@ -446,7 +414,8 @@
               <h2>Fantasy Player Pool</h2>
               <div class="muted">Tap a player to add or remove them from the team.</div>
               <div class="matches" style="margin-top:18px; grid-template-columns: repeat(2, 1fr);" id="playerGrid">
-                <div class="match-card fantasy-player" data-name="Rohit Sharma" data-role="BAT" data-team="IND" data-credit="10" data-points="52">
+
+                <div class="match-card fantasy-player" data-name="Rohit Sharma" data-role="BAT" data-credit="10" data-points="52">
                   <div class="league">IND · BAT</div>
                   <div class="teams">Rohit Sharma</div>
                   <div class="meta">Credits: 10 · Base Pts: 52</div>
@@ -456,7 +425,8 @@
                     <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
                   </div>
                 </div>
-                <div class="match-card fantasy-player" data-name="Virat Kohli" data-role="BAT" data-team="IND" data-credit="9.5" data-points="48">
+
+                <div class="match-card fantasy-player" data-name="Virat Kohli" data-role="BAT" data-credit="9.5" data-points="48">
                   <div class="league">IND · BAT</div>
                   <div class="teams">Virat Kohli</div>
                   <div class="meta">Credits: 9.5 · Base Pts: 48</div>
@@ -466,7 +436,8 @@
                     <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
                   </div>
                 </div>
-                <div class="match-card fantasy-player" data-name="Shubman Gill" data-role="BAT" data-team="IND" data-credit="9" data-points="44">
+
+                <div class="match-card fantasy-player" data-name="Shubman Gill" data-role="BAT" data-credit="9" data-points="44">
                   <div class="league">IND · BAT</div>
                   <div class="teams">Shubman Gill</div>
                   <div class="meta">Credits: 9 · Base Pts: 44</div>
@@ -476,7 +447,8 @@
                     <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
                   </div>
                 </div>
-                <div class="match-card fantasy-player" data-name="KL Rahul" data-role="WK" data-team="IND" data-credit="8.5" data-points="38">
+
+                <div class="match-card fantasy-player" data-name="KL Rahul" data-role="WK" data-credit="8.5" data-points="38">
                   <div class="league">IND · WK</div>
                   <div class="teams">KL Rahul</div>
                   <div class="meta">Credits: 8.5 · Base Pts: 38</div>
@@ -486,7 +458,8 @@
                     <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
                   </div>
                 </div>
-                <div class="match-card fantasy-player" data-name="Hardik Pandya" data-role="AR" data-team="IND" data-credit="9" data-points="46">
+
+                <div class="match-card fantasy-player" data-name="Hardik Pandya" data-role="AR" data-credit="9" data-points="46">
                   <div class="league">IND · AR</div>
                   <div class="teams">Hardik Pandya</div>
                   <div class="meta">Credits: 9 · Base Pts: 46</div>
@@ -496,7 +469,8 @@
                     <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
                   </div>
                 </div>
-                <div class="match-card fantasy-player" data-name="Ravindra Jadeja" data-role="AR" data-team="IND" data-credit="8.5" data-points="42">
+
+                <div class="match-card fantasy-player" data-name="Ravindra Jadeja" data-role="AR" data-credit="8.5" data-points="42">
                   <div class="league">IND · AR</div>
                   <div class="teams">Ravindra Jadeja</div>
                   <div class="meta">Credits: 8.5 · Base Pts: 42</div>
@@ -506,7 +480,8 @@
                     <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
                   </div>
                 </div>
-                <div class="match-card fantasy-player" data-name="Jasprit Bumrah" data-role="BOWL" data-team="IND" data-credit="9" data-points="50">
+
+                <div class="match-card fantasy-player" data-name="Jasprit Bumrah" data-role="BOWL" data-credit="9" data-points="50">
                   <div class="league">IND · BOWL</div>
                   <div class="teams">Jasprit Bumrah</div>
                   <div class="meta">Credits: 9 · Base Pts: 50</div>
@@ -516,7 +491,8 @@
                     <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
                   </div>
                 </div>
-                <div class="match-card fantasy-player" data-name="Pat Cummins" data-role="BOWL" data-team="AUS" data-credit="8.5" data-points="41">
+
+                <div class="match-card fantasy-player" data-name="Pat Cummins" data-role="BOWL" data-credit="8.5" data-points="41">
                   <div class="league">AUS · BOWL</div>
                   <div class="teams">Pat Cummins</div>
                   <div class="meta">Credits: 8.5 · Base Pts: 41</div>
@@ -526,7 +502,8 @@
                     <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
                   </div>
                 </div>
-                <div class="match-card fantasy-player" data-name="Mitchell Starc" data-role="BOWL" data-team="AUS" data-credit="8.5" data-points="40">
+
+                <div class="match-card fantasy-player" data-name="Mitchell Starc" data-role="BOWL" data-credit="8.5" data-points="40">
                   <div class="league">AUS · BOWL</div>
                   <div class="teams">Mitchell Starc</div>
                   <div class="meta">Credits: 8.5 · Base Pts: 40</div>
@@ -536,7 +513,8 @@
                     <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
                   </div>
                 </div>
-                <div class="match-card fantasy-player" data-name="David Warner" data-role="BAT" data-team="AUS" data-credit="9" data-points="43">
+
+                <div class="match-card fantasy-player" data-name="David Warner" data-role="BAT" data-credit="9" data-points="43">
                   <div class="league">AUS · BAT</div>
                   <div class="teams">David Warner</div>
                   <div class="meta">Credits: 9 · Base Pts: 43</div>
@@ -546,7 +524,8 @@
                     <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
                   </div>
                 </div>
-                <div class="match-card fantasy-player" data-name="Steve Smith" data-role="BAT" data-team="AUS" data-credit="8.5" data-points="39">
+
+                <div class="match-card fantasy-player" data-name="Steve Smith" data-role="BAT" data-credit="8.5" data-points="39">
                   <div class="league">AUS · BAT</div>
                   <div class="teams">Steve Smith</div>
                   <div class="meta">Credits: 8.5 · Base Pts: 39</div>
@@ -556,7 +535,8 @@
                     <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
                   </div>
                 </div>
-                <div class="match-card fantasy-player" data-name="Glenn Maxwell" data-role="AR" data-team="AUS" data-credit="9" data-points="47">
+
+                <div class="match-card fantasy-player" data-name="Glenn Maxwell" data-role="AR" data-credit="9" data-points="47">
                   <div class="league">AUS · AR</div>
                   <div class="teams">Glenn Maxwell</div>
                   <div class="meta">Credits: 9 · Base Pts: 47</div>
@@ -566,8 +546,10 @@
                     <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
                   </div>
                 </div>
+
               </div>
             </div>
+
             <div class="panel">
               <h2>Selected Team</h2>
               <div class="muted">Your selected fantasy XI will appear here.</div>
@@ -587,12 +569,12 @@
       <div class="container dashboard-grid">
         <aside class="sidebar card">
           <h3 style="margin:0 0 8px;">User Dashboard</h3>
-          <div class="muted">Demo navigation</div>
+          <div class="muted" id="dashboardWelcome">Welcome, Guest</div>
           <div class="menu">
             <button class="active">Overview</button>
-            <button>Wallet</button>
-            <button>Bet History</button>
-            <button>Transactions</button>
+            <button>Fantasy</button>
+            <button>Contest History</button>
+            <button>Activity</button>
             <button>Profile</button>
           </div>
           <div class="promo" style="margin-top:18px; padding:18px; display:block;">
@@ -620,70 +602,27 @@
 
           <div class="grid-2">
             <div class="panel">
-              <h2>Recent Transactions</h2>
-              <div class="table-card">
-                <table>
-                  <thead><tr><th>Date</th><th>Activity</th><th>Section</th><th>Status</th></tr></thead>
-                  <tbody>
-                    <tr><td>25 Mar 2026</td><td>Contest Joined</td><td>Mega Contest</td><td><span class="status">Success</span></td></tr>
-                    <tr><td>23 Mar 2026</td><td>Team Edited</td><td>Fantasy XI</td><td><span class="status pending">Updated</span></td></tr>
-                    <tr><td>21 Mar 2026</td><td>Captain Changed</td><td>IND vs AUS</td><td><span class="status">Saved</span></td></tr>
-                  </tbody>
-                </table>
-              </div>
+              <h2>Recent Activity</h2>
+              <table>
+                <thead><tr><th>Date</th><th>Activity</th><th>Section</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>25 Mar 2026</td><td>Contest Joined</td><td>Mega Contest</td><td><span class="status">Success</span></td></tr>
+                  <tr><td>23 Mar 2026</td><td>Team Edited</td><td>Fantasy XI</td><td><span class="status pending">Updated</span></td></tr>
+                  <tr><td>21 Mar 2026</td><td>Captain Changed</td><td>IND vs AUS</td><td><span class="status">Saved</span></td></tr>
+                </tbody>
+              </table>
             </div>
 
             <div class="panel">
               <h2>Recent Fantasy Activity</h2>
-              <div class="table-card">
-                <table>
-                  <thead><tr><th>Match</th><th>Contest</th><th>Points</th><th>Status</th></tr></thead>
-                  <tbody>
-                    <tr><td>India vs Australia</td><td>Mega Contest</td><td>312</td><td><span class="status">Live</span></td></tr>
-                    <tr><td>India vs Australia</td><td>Head to Head</td><td>278</td><td><span class="status pending">Pending</span></td></tr>
-                    <tr><td>India vs Australia</td><td>Winner Takes More</td><td>356</td><td><span class="status">Qualified</span></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel">
-            <h2>Open Matches</h2>
-            <div class="matches" style="margin-top:16px;">
-              <div class="match-card">
-                <div class="league">Cricket</div>
-                <div class="teams">India vs Australia</div>
-                <div class="meta">Stake demo · live card</div>
-                <div class="odds">
-                  <div class="odd"><span>India</span><strong>1.68</strong></div>
-                  <div class="odd"><span>Draw</span><strong>2.25</strong></div>
-                  <div class="odd"><span>Australia</span><strong>2.84</strong></div>
-                </div>
-                <button class="btn btn-primary place-btn">Add to Slip</button>
-              </div>
-              <div class="match-card">
-                <div class="league">Football</div>
-                <div class="teams">Arsenal vs Liverpool</div>
-                <div class="meta">Featured market</div>
-                <div class="odds">
-                  <div class="odd"><span>Home</span><strong>2.32</strong></div>
-                  <div class="odd"><span>Draw</span><strong>3.10</strong></div>
-                  <div class="odd"><span>Away</span><strong>2.56</strong></div>
-                </div>
-                <button class="btn btn-primary place-btn">Add to Slip</button>
-              </div>
-              <div class="match-card">
-                <div class="league">Tennis</div>
-                <div class="teams">Sinner vs Alcaraz</div>
-                <div class="meta">Grand Slam market</div>
-                <div class="odds">
-                  <div class="odd"><span>Sinner</span><strong>1.78</strong></div>
-                  <div class="odd"><span>Over</span><strong>2.08</strong></div>
-                  <div class="odd"><span>Alcaraz</span><strong>2.05</strong></div>
-                </div>
-                <button class="btn btn-primary place-btn">Add to Slip</button>
-              </div>
+              <table>
+                <thead><tr><th>Match</th><th>Contest</th><th>Points</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>India vs Australia</td><td>Mega Contest</td><td>312</td><td><span class="status">Live</span></td></tr>
+                  <tr><td>India vs Australia</td><td>Head to Head</td><td>278</td><td><span class="status pending">Pending</span></td></tr>
+                  <tr><td>India vs Australia</td><td>Winner Takes More</td><td>356</td><td><span class="status">Qualified</span></td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -698,16 +637,16 @@
           <div class="menu">
             <button class="active">Overview</button>
             <button>Users</button>
-            <button>Markets</button>
-            <button>Transactions</button>
+            <button>Contests</button>
+            <button>Activity</button>
             <button>Reports</button>
           </div>
         </aside>
         <div class="content-area">
           <div class="wallet-grid">
             <div class="wallet-card"><div class="muted">Total Users</div><div class="amt">12,480</div></div>
-            <div class="wallet-card"><div class="muted">Active Markets</div><div class="amt">580</div></div>
-            <div class="wallet-card"><div class="muted">Pending Requests</div><div class="amt" style="color:var(--gold);">42</div></div>
+            <div class="wallet-card"><div class="muted">Active Contests</div><div class="amt">58</div></div>
+            <div class="wallet-card"><div class="muted">Pending Reviews</div><div class="amt" style="color:var(--gold);">42</div></div>
           </div>
           <div class="grid-2">
             <div class="panel">
@@ -724,11 +663,11 @@
             <div class="panel">
               <h2>Latest Requests</h2>
               <table>
-                <thead><tr><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+                <thead><tr><th>Type</th><th>Contest</th><th>Status</th></tr></thead>
                 <tbody>
-                  <tr><td>Withdrawal</td><td>₹ 8,000</td><td><span class="status pending">Pending</span></td></tr>
-                  <tr><td>Deposit</td><td>₹ 15,000</td><td><span class="status">Approved</span></td></tr>
-                  <tr><td>KYC</td><td>-</td><td><span class="status failed">Rejected</span></td></tr>
+                  <tr><td>Contest Join</td><td>Mega Contest</td><td><span class="status pending">Pending</span></td></tr>
+                  <tr><td>Profile Update</td><td>User Dashboard</td><td><span class="status">Approved</span></td></tr>
+                  <tr><td>KYC Demo</td><td>Account</td><td><span class="status failed">Rejected</span></td></tr>
                 </tbody>
               </table>
             </div>
@@ -737,8 +676,8 @@
             <h2>Admin Notes</h2>
             <ul>
               <li>This is a visual admin demo section only.</li>
-              <li>You can later split this into separate files or React pages.</li>
-              <li>Brand logo, theme and content can be customized easily.</li>
+              <li>User account, fantasy team and joined contest are stored in browser localStorage.</li>
+              <li>Refresh करने पर भी demo account और selected team याद रहेंगे.</li>
             </ul>
           </div>
         </div>
@@ -747,7 +686,7 @@
   </main>
 
   <footer>
-    © 2026 Game Of Skills · Premium multi-page demo app
+    © 2026 Game Of Skills · Premium fantasy demo app
   </footer>
 
   <script>
@@ -755,11 +694,121 @@
     let captain = '';
     let viceCaptain = '';
 
+    const storageKeys = {
+      account: 'gos_demo_account',
+      team: 'gos_demo_team',
+      captain: 'gos_demo_captain',
+      viceCaptain: 'gos_demo_vice_captain',
+      contest: 'gos_demo_contest',
+      coins: 'gos_demo_coins'
+    };
+
     function showPage(id) {
       document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
       const target = document.getElementById(id);
       if (target) target.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      syncDemoUI();
+    }
+
+    function registerDemoAccount() {
+      const fullName = document.getElementById('registerName').value.trim();
+      const email = document.getElementById('registerEmail').value.trim();
+      const password = document.getElementById('registerPassword').value.trim();
+      const message = document.getElementById('registerMessage');
+
+      if (!fullName || !email || !password) {
+        message.textContent = 'Please fill all fields.';
+        return;
+      }
+
+      const account = { fullName, email, password };
+      localStorage.setItem(storageKeys.account, JSON.stringify(account));
+
+      if (!localStorage.getItem(storageKeys.coins)) {
+        localStorage.setItem(storageKeys.coins, '500');
+      }
+
+      message.textContent = 'Demo account created successfully.';
+      syncDemoUI();
+      showPage('dashboard');
+    }
+
+    function loginDemoAccount() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value.trim();
+      const message = document.getElementById('loginMessage');
+      const account = JSON.parse(localStorage.getItem(storageKeys.account) || 'null');
+
+      if (!account) {
+        message.textContent = 'No demo account found. Please register first.';
+        return;
+      }
+
+      if (account.email !== email || account.password !== password) {
+        message.textContent = 'Invalid demo login details.';
+        return;
+      }
+
+      message.textContent = 'Login successful.';
+      syncDemoUI();
+      showPage('dashboard');
+    }
+
+    function syncDemoUI() {
+      const account = JSON.parse(localStorage.getItem(storageKeys.account) || 'null');
+      const coins = localStorage.getItem(storageKeys.coins) || '500';
+      const contest = localStorage.getItem(storageKeys.contest) || '';
+
+      const topPill = document.getElementById('topAccountPill');
+      const welcome = document.getElementById('dashboardWelcome');
+      const joinedContestStatus = document.getElementById('joinedContestStatus');
+
+      if (topPill) {
+        topPill.textContent = account ? `${account.fullName} · ${coins} Demo Coins` : 'Guest Demo';
+      }
+
+      if (welcome) {
+        welcome.textContent = account ? `Welcome, ${account.fullName}` : 'Welcome, Guest';
+      }
+
+      if (joinedContestStatus) {
+        joinedContestStatus.textContent = contest || 'No contest joined yet.';
+      }
+
+      const savedTeam = JSON.parse(localStorage.getItem(storageKeys.team) || '[]');
+      const savedCaptain = localStorage.getItem(storageKeys.captain) || '';
+      const savedViceCaptain = localStorage.getItem(storageKeys.viceCaptain) || '';
+
+      selectedPlayers = savedTeam;
+      captain = savedCaptain;
+      viceCaptain = savedViceCaptain;
+
+      document.querySelectorAll('.fantasy-player').forEach(card => {
+        const name = card.dataset.name;
+        const selectBtn = card.querySelector('.btn.btn-dark, .btn.btn-red');
+        const exists = selectedPlayers.find(p => p.name === name);
+
+        if (selectBtn) {
+          if (exists) {
+            selectBtn.textContent = 'Remove';
+            selectBtn.classList.remove('btn-dark');
+            selectBtn.classList.add('btn-red');
+          } else {
+            selectBtn.textContent = 'Select';
+            selectBtn.classList.remove('btn-red');
+            selectBtn.classList.add('btn-dark');
+          }
+        }
+      });
+
+      renderFantasyTeam();
+    }
+
+    function saveFantasyState() {
+      localStorage.setItem(storageKeys.team, JSON.stringify(selectedPlayers));
+      localStorage.setItem(storageKeys.captain, captain);
+      localStorage.setItem(storageKeys.viceCaptain, viceCaptain);
     }
 
     function toggleFantasyPlayer(button) {
@@ -779,19 +828,24 @@
         button.classList.add('btn-dark');
       } else {
         const totalCredits = selectedPlayers.reduce((sum, p) => sum + p.credit, 0);
+
         if (selectedPlayers.length >= 11) {
           alert('You can select up to 11 players only.');
           return;
         }
+
         if (totalCredits + credit > 100) {
           alert('Credit cap exceeded.');
           return;
         }
+
         selectedPlayers.push({ name, role, credit, points });
         button.textContent = 'Remove';
         button.classList.remove('btn-dark');
         button.classList.add('btn-red');
       }
+
+      saveFantasyState();
       renderFantasyTeam();
     }
 
@@ -799,12 +853,16 @@
       const card = button.closest('.fantasy-player');
       const name = card.dataset.name;
       const exists = selectedPlayers.find(p => p.name === name);
+
       if (!exists) {
         alert('Select the player first.');
         return;
       }
+
       if (type === 'captain') captain = name;
       if (type === 'vice') viceCaptain = name;
+
+      saveFantasyState();
       renderFantasyTeam();
     }
 
@@ -816,9 +874,10 @@
       const captainName = document.getElementById('captainName');
       const viceCaptainName = document.getElementById('viceCaptainName');
 
-      selectedCount.textContent = selectedPlayers.length;
+      if (selectedCount) selectedCount.textContent = selectedPlayers.length;
+
       const credits = selectedPlayers.reduce((sum, p) => sum + p.credit, 0);
-      creditsUsed.textContent = credits;
+      if (creditsUsed) creditsUsed.textContent = credits;
 
       let totalPoints = 0;
       selectedPlayers.forEach(p => {
@@ -827,11 +886,15 @@
         else if (p.name === viceCaptain) pts *= 1.5;
         totalPoints += pts;
       });
-      projectedPoints.textContent = totalPoints;
+
+      if (projectedPoints) projectedPoints.textContent = totalPoints;
+      if (captainName) captainName.textContent = captain || 'Not set';
+      if (viceCaptainName) viceCaptainName.textContent = viceCaptain || 'Not set';
+
       const yourLeaderboardPoints = document.getElementById('yourLeaderboardPoints');
       if (yourLeaderboardPoints) yourLeaderboardPoints.textContent = totalPoints;
-      captainName.textContent = captain || 'Not set';
-      viceCaptainName.textContent = viceCaptain || 'Not set';
+
+      if (!body) return;
 
       if (!selectedPlayers.length) {
         body.innerHTML = '<tr><td colspan="4" class="muted">No players selected yet.</td></tr>';
@@ -856,24 +919,50 @@
       selectedPlayers = [];
       captain = '';
       viceCaptain = '';
+      localStorage.removeItem(storageKeys.team);
+      localStorage.removeItem(storageKeys.captain);
+      localStorage.removeItem(storageKeys.viceCaptain);
+      localStorage.removeItem(storageKeys.contest);
+
       document.querySelectorAll('.fantasy-player .btn-red').forEach(btn => {
         btn.textContent = 'Select';
         btn.classList.remove('btn-red');
         btn.classList.add('btn-dark');
       });
-      document.getElementById('joinedContestStatus').textContent = 'No contest joined yet.';
-      renderFantasyTeam();
+
+      syncDemoUI();
     }
 
     function joinContest(contestName, entryFee) {
+      const account = JSON.parse(localStorage.getItem(storageKeys.account) || 'null');
+
+      if (!account) {
+        alert('Please create or login to a demo account first.');
+        showPage('login');
+        return;
+      }
+
       if (selectedPlayers.length !== 11) {
         alert('Please select exactly 11 players before joining a contest.');
         return;
       }
-      const text = `Joined ${contestName} with demo entry ${entryFee} coins.`;
-      document.getElementById('joinedContestStatus').textContent = text;
-      alert(text);
+
+      const currentCoins = parseInt(localStorage.getItem(storageKeys.coins) || '500', 10);
+
+      if (currentCoins < entryFee) {
+        alert('Not enough demo coins.');
+        return;
+      }
+
+      const updatedCoins = currentCoins - entryFee;
+      localStorage.setItem(storageKeys.coins, String(updatedCoins));
+      localStorage.setItem(storageKeys.contest, `Joined ${contestName} with ${entryFee} demo coins.`);
+
+      syncDemoUI();
+      alert(`Joined ${contestName}. Remaining demo coins: ${updatedCoins}`);
     }
+
+    window.addEventListener('load', syncDemoUI);
   </script>
 </body>
 </html>
