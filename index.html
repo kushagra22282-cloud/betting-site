@@ -1,28 +1,529 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Game Of Skills</title>
-<style>
-body { font-family: Arial; background:#0b1c2c; color:white; text-align:center; }
-.box { background:#142f4a; margin:20px; padding:20px; border-radius:10px; }
-button { padding:10px; background:#00c853; color:white; border:none; cursor:pointer; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Of Skills</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: radial-gradient(circle at top, #16365f 0%, #081321 45%, #050b14 100%);
+      color: #fff;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1180px, 92%); margin: 0 auto; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(6, 14, 25, 0.75);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+    }
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #16c784, #00e1ff);
+      color: #04111d;
+      font-size: 22px;
+      box-shadow: 0 10px 28px rgba(0, 225, 255, 0.25);
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      color: #c8d7ea;
+      font-weight: 600;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .balance {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #e9f4ff;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .btn {
+      border: none;
+      cursor: pointer;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, #19d37e, #0fbcc8);
+      color: #04111d;
+      box-shadow: 0 12px 24px rgba(25, 211, 126, 0.25);
+    }
+    .btn-dark {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero {
+      padding: 54px 0 26px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .hero-card, .side-card, .panel, .match-card, .stat-card, .promo-card {
+      background: linear-gradient(180deg, rgba(20,34,56,0.95), rgba(8,17,30,0.96));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.28);
+    }
+    .hero-card {
+      padding: 36px;
+      min-height: 360px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -60px -80px auto;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle, rgba(0,225,255,0.3), transparent 70%);
+    }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(25, 211, 126, 0.12);
+      color: #7ff7c8;
+      border: 1px solid rgba(25, 211, 126, 0.25);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 6vw, 64px);
+      line-height: 1.03;
+      letter-spacing: -1.5px;
+    }
+    .hero p {
+      color: #b9c9dc;
+      font-size: 17px;
+      line-height: 1.7;
+      max-width: 640px;
+      margin: 16px 0 24px;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .stat-card {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      box-shadow: none;
+    }
+    .stat-card .label {
+      color: #93a7c0;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .stat-card .value {
+      font-size: 22px;
+      font-weight: 800;
+    }
+    .side-stack {
+      display: grid;
+      gap: 18px;
+    }
+    .side-card {
+      padding: 22px;
+    }
+    .side-card h3, .panel h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+    .side-card p, .muted {
+      color: #afc0d6;
+      line-height: 1.6;
+    }
+    .mini-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .mini-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #19d37e;
+      box-shadow: 0 0 0 8px rgba(25,211,126,0.15);
+    }
+    .section {
+      padding: 22px 0;
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .section-head h2 {
+      margin: 0;
+      font-size: 30px;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #d9e7f5;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .chip.active {
+      background: linear-gradient(135deg, rgba(25, 211, 126, 0.18), rgba(0,225,255,0.16));
+      color: #fff;
+    }
+    .matches {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .match-card {
+      padding: 22px;
+    }
+    .league {
+      color: #7ff7c8;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .teams {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+    .meta {
+      color: #9bb0c7;
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+    .odds {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .odd-box {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 12px 10px;
+      text-align: center;
+    }
+    .odd-box .odd-label {
+      color: #99adc4;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+    .odd-box .odd-value {
+      font-weight: 800;
+      font-size: 20px;
+    }
+    .place-btn {
+      width: 100%;
+      margin-top: 2px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .panel {
+      padding: 24px;
+    }
+    .panel ul {
+      margin: 14px 0 0;
+      padding-left: 18px;
+      color: #c8d6e6;
+      line-height: 1.8;
+    }
+    .promo-card {
+      margin-top: 18px;
+      padding: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      background: linear-gradient(135deg, rgba(25,211,126,0.16), rgba(0,225,255,0.12), rgba(255,255,255,0.04));
+    }
+    .promo-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    footer {
+      padding: 28px 0 40px;
+      color: #8ea3bb;
+      text-align: center;
+      font-size: 14px;
+    }
+    @media (max-width: 980px) {
+      .hero-grid, .matches, .grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .brand { font-size: 20px; }
+      .hero-card, .side-card, .panel, .match-card { padding: 18px; }
+      .odds { grid-template-columns: 1fr; }
+      .promo-card, .nav { flex-direction: column; align-items: stretch; }
+      .nav-actions { justify-content: space-between; }
+      .balance { text-align: center; }
+    }
+  </style>
 </head>
 <body>
+  <div class="topbar">
+    <div class="container nav">
+      <div class="brand">
+        <div class="brand-badge">🎯</div>
+        <div>Game Of Skills</div>
+      </div>
+      <div class="nav-links">
+        <a href="#live">Live</a>
+        <a href="#sports">Sports</a>
+        <a href="#promotions">Promotions</a>
+        <a href="#support">Support</a>
+      </div>
+      <div class="nav-actions">
+        <div class="balance">Wallet: ₹ 24,500</div>
+        <button class="btn btn-dark">Login</button>
+        <button class="btn btn-primary">Register</button>
+      </div>
+    </div>
+  </div>
 
-<h1>🔥 Game Of Skills Betting</h1>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-card">
+        <div class="tag">⚡ Live Odds · Fast Interface · Premium UI</div>
+        <h1>Bet on top matches with a cleaner, stronger look.</h1>
+        <p>
+          A modern betting-style homepage with a premium sports layout, match cards, market odds, wallet preview and strong call-to-action sections.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary">Start Playing</button>
+          <button class="btn btn-dark">View Matches</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-card">
+            <div class="label">Live Matches</div>
+            <div class="value">126+</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Active Markets</div>
+            <div class="value">580+</div>
+          </div>
+          <div class="stat-card">
+            <div class="label">Winning Odds</div>
+            <div class="value">Up to 3.85</div>
+          </div>
+        </div>
+      </div>
 
-<div class="box">
-<h2>India vs Australia</h2>
-<p>Odds: 1.6</p>
-<button>Place Bet</button>
-</div>
+      <div class="side-stack">
+        <div class="side-card" id="live">
+          <h3>Live Now</h3>
+          <p>Running events with active odds updates.</p>
+          <div class="mini-list">
+            <div class="mini-item">
+              <div>
+                <strong>India vs Australia</strong><br>
+                <span class="muted">Cricket · ODI</span>
+              </div>
+              <div class="live-dot"></div>
+            </div>
+            <div class="mini-item">
+              <div>
+                <strong>Manchester Utd vs Chelsea</strong><br>
+                <span class="muted">Football · EPL</span>
+              </div>
+              <div class="live-dot"></div>
+            </div>
+            <div class="mini-item">
+              <div>
+                <strong>Nadal vs Djokovic</strong><br>
+                <span class="muted">Tennis · ATP</span>
+              </div>
+              <div class="live-dot"></div>
+            </div>
+          </div>
+        </div>
 
-<div class="box">
-<h2>Manchester United vs Chelsea</h2>
-<p>Odds: 2.1</p>
-<button>Place Bet</button>
-</div>
+        <div class="side-card">
+          <h3>Quick Actions</h3>
+          <p>Deposit, withdraw and manage account activity from a cleaner panel.</p>
+          <div class="hero-actions" style="margin:18px 0 0;">
+            <button class="btn btn-primary">Deposit</button>
+            <button class="btn btn-dark">Withdraw</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <section class="section" id="sports">
+    <div class="container">
+      <div class="section-head">
+        <h2>Featured Matches</h2>
+        <div class="chips">
+          <div class="chip active">All</div>
+          <div class="chip">Cricket</div>
+          <div class="chip">Football</div>
+          <div class="chip">Tennis</div>
+          <div class="chip">Basketball</div>
+        </div>
+      </div>
+
+      <div class="matches">
+        <div class="match-card">
+          <div class="league">Cricket</div>
+          <div class="teams">India vs Australia</div>
+          <div class="meta">Today · 7:30 PM · Live Market</div>
+          <div class="odds">
+            <div class="odd-box"><div class="odd-label">India</div><div class="odd-value">1.68</div></div>
+            <div class="odd-box"><div class="odd-label">Draw</div><div class="odd-value">2.25</div></div>
+            <div class="odd-box"><div class="odd-label">Australia</div><div class="odd-value">2.84</div></div>
+          </div>
+          <button class="btn btn-primary place-btn">Place Bet</button>
+        </div>
+
+        <div class="match-card">
+          <div class="league">Football</div>
+          <div class="teams">Manchester Utd vs Chelsea</div>
+          <div class="meta">Today · 10:00 PM · Premier League</div>
+          <div class="odds">
+            <div class="odd-box"><div class="odd-label">Home</div><div class="odd-value">2.10</div></div>
+            <div class="odd-box"><div class="odd-label">Draw</div><div class="odd-value">3.05</div></div>
+            <div class="odd-box"><div class="odd-label">Away</div><div class="odd-value">2.72</div></div>
+          </div>
+          <button class="btn btn-primary place-btn">Place Bet</button>
+        </div>
+
+        <div class="match-card">
+          <div class="league">Tennis</div>
+          <div class="teams">Nadal vs Djokovic</div>
+          <div class="meta">Tomorrow · 5:30 PM · ATP Tour</div>
+          <div class="odds">
+            <div class="odd-box"><div class="odd-label">Nadal</div><div class="odd-value">1.95</div></div>
+            <div class="odd-box"><div class="odd-label">Sets 3</div><div class="odd-value">2.40</div></div>
+            <div class="odd-box"><div class="odd-label">Djokovic</div><div class="odd-value">1.88</div></div>
+          </div>
+          <button class="btn btn-primary place-btn">Place Bet</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container grid-2">
+      <div class="panel">
+        <h2>Why This Version Looks Better</h2>
+        <div class="muted">This layout is designed to feel closer to a real modern sports platform.</div>
+        <ul>
+          <li>Premium hero section with bold first impression</li>
+          <li>Wallet badge, login and register actions in header</li>
+          <li>Cleaner match cards with multiple odds boxes</li>
+          <li>Better spacing, stronger colors and responsive layout</li>
+          <li>Easy to expand later with login, wallet and admin panel</li>
+        </ul>
+      </div>
+      <div class="panel" id="support">
+        <h2>Popular Markets</h2>
+        <ul>
+          <li>Match Winner</li>
+          <li>Over / Under</li>
+          <li>First Innings Runs</li>
+          <li>Both Teams to Score</li>
+          <li>Total Sets / Total Goals</li>
+        </ul>
+        <div class="promo-card" id="promotions">
+          <div>
+            <div class="promo-title">Welcome Bonus</div>
+            <div class="muted">Get premium styled onboarding space for offers and promotions.</div>
+          </div>
+          <button class="btn btn-primary">Claim Now</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Game Of Skills · Premium sports interface demo
+  </footer>
 </body>
 </html>
