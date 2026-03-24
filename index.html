@@ -3,527 +3,822 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Game Of Skills</title>
+  <title>Game Of Skills Demo App</title>
   <style>
     * { box-sizing: border-box; }
+    :root {
+      --bg: #07111d;
+      --panel: #0f1c2d;
+      --panel-2: #12253b;
+      --soft: rgba(255,255,255,0.06);
+      --soft-2: rgba(255,255,255,0.1);
+      --text: #ffffff;
+      --muted: #9db1c8;
+      --green: #19d37e;
+      --cyan: #10d6df;
+      --red: #ff6767;
+      --gold: #ffcc4d;
+      --radius: 22px;
+      --shadow: 0 22px 55px rgba(0,0,0,0.35);
+    }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: Inter, Arial, sans-serif;
-      background: radial-gradient(circle at top, #16365f 0%, #081321 45%, #050b14 100%);
-      color: #fff;
+      color: var(--text);
+      background: radial-gradient(circle at top, #17385f 0%, #091321 40%, #040910 100%);
     }
     a { color: inherit; text-decoration: none; }
-    .container { width: min(1180px, 92%); margin: 0 auto; }
+    .container { width: min(1200px, 92%); margin: 0 auto; }
+    .hidden { display: none !important; }
     .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(10px);
-      background: rgba(6, 14, 25, 0.75);
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(14px);
+      background: rgba(6, 14, 25, 0.76);
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
     .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 18px;
       padding: 16px 0;
     }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: 0.4px;
-    }
+    .brand { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 800; }
     .brand-badge {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, #16c784, #00e1ff);
-      color: #04111d;
-      font-size: 22px;
-      box-shadow: 0 10px 28px rgba(0, 225, 255, 0.25);
+      width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--green), var(--cyan)); color: #04111d; font-size: 22px;
+      box-shadow: 0 10px 28px rgba(16,214,223,0.25);
     }
-    .nav-links {
-      display: flex;
-      gap: 20px;
-      color: #c8d7ea;
-      font-weight: 600;
-    }
-    .nav-links a:hover { color: #fff; }
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .balance {
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: #e9f4ff;
-      font-weight: 700;
-      font-size: 14px;
+    .nav-links { display: flex; gap: 18px; color: #d5e2ee; font-weight: 600; }
+    .nav-links a { opacity: 0.88; }
+    .nav-links a:hover { opacity: 1; }
+    .nav-actions { display: flex; gap: 12px; align-items: center; }
+    .pill {
+      padding: 10px 14px; border-radius: 999px; background: var(--soft);
+      border: 1px solid rgba(255,255,255,0.08); font-weight: 700; font-size: 14px;
     }
     .btn {
-      border: none;
-      cursor: pointer;
-      padding: 12px 18px;
-      border-radius: 12px;
-      font-weight: 700;
-      transition: 0.2s ease;
+      border: none; border-radius: 14px; padding: 12px 18px; cursor: pointer; font-weight: 800;
+      transition: transform .2s ease, opacity .2s ease, box-shadow .2s ease;
     }
     .btn:hover { transform: translateY(-1px); }
     .btn-primary {
-      background: linear-gradient(135deg, #19d37e, #0fbcc8);
-      color: #04111d;
-      box-shadow: 0 12px 24px rgba(25, 211, 126, 0.25);
+      background: linear-gradient(135deg, var(--green), var(--cyan)); color: #04111d;
+      box-shadow: 0 14px 28px rgba(25,211,126,0.22);
     }
-    .btn-dark {
-      background: rgba(255,255,255,0.08);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.1);
+    .btn-dark { background: var(--soft); color: #fff; border: 1px solid rgba(255,255,255,0.08); }
+    .btn-red { background: linear-gradient(135deg, #ff7b7b, #ff5d5d); color: #fff; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .hero { padding: 52px 0 22px; }
+    .hero-grid { display: grid; grid-template-columns: 1.35fr 0.85fr; gap: 22px; }
+    .card, .hero-card, .side-card, .match-card, .panel, .wallet-card, .table-card {
+      background: linear-gradient(180deg, rgba(16,28,45,0.96), rgba(8,16,28,0.98));
+      border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius); box-shadow: var(--shadow);
     }
-    .hero {
-      padding: 54px 0 26px;
-    }
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.35fr 0.85fr;
-      gap: 24px;
-      align-items: stretch;
-    }
-    .hero-card, .side-card, .panel, .match-card, .stat-card, .promo-card {
-      background: linear-gradient(180deg, rgba(20,34,56,0.95), rgba(8,17,30,0.96));
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.28);
-    }
-    .hero-card {
-      padding: 36px;
-      min-height: 360px;
-      position: relative;
-      overflow: hidden;
-    }
+    .hero-card { padding: 34px; min-height: 370px; position: relative; overflow: hidden; }
     .hero-card::after {
-      content: "";
-      position: absolute;
-      inset: auto -60px -80px auto;
-      width: 240px;
-      height: 240px;
-      background: radial-gradient(circle, rgba(0,225,255,0.3), transparent 70%);
+      content: ''; position: absolute; right: -60px; bottom: -90px; width: 240px; height: 240px;
+      background: radial-gradient(circle, rgba(16,214,223,0.25), transparent 70%);
     }
     .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(25, 211, 126, 0.12);
-      color: #7ff7c8;
-      border: 1px solid rgba(25, 211, 126, 0.25);
-      border-radius: 999px;
-      padding: 8px 12px;
-      font-weight: 700;
-      font-size: 13px;
-      margin-bottom: 18px;
+      display: inline-flex; gap: 8px; align-items: center; padding: 8px 12px; border-radius: 999px;
+      background: rgba(25,211,126,0.12); border: 1px solid rgba(25,211,126,0.24); color: #7ff7c8; font-weight: 800; font-size: 13px;
+      margin-bottom: 16px;
     }
-    h1 {
-      margin: 0;
-      font-size: clamp(34px, 6vw, 64px);
-      line-height: 1.03;
-      letter-spacing: -1.5px;
-    }
-    .hero p {
-      color: #b9c9dc;
-      font-size: 17px;
-      line-height: 1.7;
-      max-width: 640px;
-      margin: 16px 0 24px;
-    }
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    .stat-card {
-      padding: 16px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.04);
-      box-shadow: none;
-    }
-    .stat-card .label {
-      color: #93a7c0;
-      font-size: 13px;
-      margin-bottom: 6px;
-    }
-    .stat-card .value {
-      font-size: 22px;
-      font-weight: 800;
-    }
-    .side-stack {
-      display: grid;
-      gap: 18px;
-    }
-    .side-card {
-      padding: 22px;
-    }
-    .side-card h3, .panel h2 {
-      margin: 0 0 8px;
-      font-size: 22px;
-    }
-    .side-card p, .muted {
-      color: #afc0d6;
-      line-height: 1.6;
-    }
-    .mini-list {
-      display: grid;
-      gap: 12px;
-      margin-top: 18px;
-    }
+    h1 { margin: 0; font-size: clamp(34px, 6vw, 66px); line-height: 1.04; letter-spacing: -1.5px; }
+    .hero p { margin: 16px 0 22px; color: var(--muted); line-height: 1.7; font-size: 17px; max-width: 640px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .stat { padding: 16px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.05); }
+    .stat small { display: block; color: #90a6bf; margin-bottom: 6px; }
+    .stat strong { font-size: 24px; }
+    .stack { display: grid; gap: 18px; }
+    .side-card { padding: 22px; }
+    .side-card h3, .section-head h2, .panel h2, .wallet-card h2 { margin: 0 0 8px; }
+    .muted { color: var(--muted); line-height: 1.65; }
+    .mini-list { display: grid; gap: 12px; margin-top: 16px; }
     .mini-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      padding: 14px 16px;
+      display: flex; justify-content: space-between; align-items: center; gap: 16px;
+      padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
       border-radius: 16px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
     }
-    .live-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #19d37e;
-      box-shadow: 0 0 0 8px rgba(25,211,126,0.15);
-    }
-    .section {
-      padding: 22px 0;
-    }
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 18px;
-    }
-    .section-head h2 {
-      margin: 0;
-      font-size: 30px;
-    }
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .live-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 8px rgba(25,211,126,0.15); }
+    .section { padding: 20px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
     .chip {
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
+      padding: 10px 14px; border-radius: 999px; background: var(--soft); border: 1px solid rgba(255,255,255,0.08);
+      font-weight: 700; font-size: 14px; color: #d9e7f5;
+    }
+    .chip.active { background: linear-gradient(135deg, rgba(25,211,126,0.18), rgba(16,214,223,0.16)); }
+    .matches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .match-card { padding: 22px; }
+    .league { color: #7ff7c8; text-transform: uppercase; letter-spacing: 1px; font-size: 12px; font-weight: 900; margin-bottom: 14px; }
+    .teams { font-size: 24px; line-height: 1.25; font-weight: 800; margin-bottom: 8px; }
+    .meta { color: #9cb0c7; font-size: 14px; margin-bottom: 16px; }
+    .odds { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+    .odd {
+      padding: 12px 10px; border-radius: 16px; text-align: center; background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.08);
-      color: #d9e7f5;
-      font-weight: 600;
-      font-size: 14px;
     }
-    .chip.active {
-      background: linear-gradient(135deg, rgba(25, 211, 126, 0.18), rgba(0,225,255,0.16));
-      color: #fff;
-    }
-    .matches {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-    .match-card {
-      padding: 22px;
-    }
-    .league {
-      color: #7ff7c8;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-    .teams {
-      font-size: 24px;
-      font-weight: 800;
-      line-height: 1.25;
-      margin-bottom: 8px;
-    }
-    .meta {
-      color: #9bb0c7;
-      margin-bottom: 18px;
-      font-size: 14px;
-    }
-    .odds {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    .odd-box {
-      background: rgba(255,255,255,0.05);
+    .odd span { display: block; font-size: 12px; color: #97acc4; margin-bottom: 4px; }
+    .odd strong { font-size: 20px; }
+    .place-btn { width: 100%; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .panel { padding: 24px; }
+    .panel ul { margin: 14px 0 0; padding-left: 18px; color: #c5d4e4; line-height: 1.9; }
+    .promo {
+      margin-top: 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 22px; border-radius: 22px; background: linear-gradient(135deg, rgba(25,211,126,0.16), rgba(16,214,223,0.12), rgba(255,255,255,0.04));
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 12px 10px;
-      text-align: center;
     }
-    .odd-box .odd-label {
-      color: #99adc4;
-      font-size: 12px;
-      margin-bottom: 4px;
+    .promo-title { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+    .auth-wrap {
+      min-height: calc(100vh - 77px); display: grid; place-items: center; padding: 34px 0;
     }
-    .odd-box .odd-value {
-      font-weight: 800;
-      font-size: 20px;
+    .auth-card {
+      width: min(460px, 100%); padding: 28px; border-radius: 26px;
+      background: linear-gradient(180deg, rgba(16,28,45,0.98), rgba(7,14,24,0.99));
+      border: 1px solid rgba(255,255,255,0.08); box-shadow: var(--shadow);
     }
-    .place-btn {
-      width: 100%;
-      margin-top: 2px;
+    .auth-card h2 { margin: 0 0 8px; font-size: 34px; }
+    .form-grid { display: grid; gap: 14px; margin-top: 20px; }
+    label { font-size: 14px; color: #d9e6f3; font-weight: 700; display: block; margin-bottom: 7px; }
+    input, select {
+      width: 100%; padding: 14px 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04); color: #fff; outline: none;
     }
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
+    .auth-foot { margin-top: 16px; color: var(--muted); text-align: center; }
+    .link-btn { color: #80f4c6; font-weight: 800; cursor: pointer; }
+    .dashboard-grid { display: grid; grid-template-columns: 280px 1fr; gap: 20px; padding: 24px 0 34px; }
+    .sidebar { padding: 20px; height: fit-content; position: sticky; top: 95px; }
+    .menu { display: grid; gap: 10px; margin-top: 18px; }
+    .menu button {
+      width: 100%; text-align: left; padding: 14px 16px; border-radius: 16px; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08); color: #fff; font-weight: 700; cursor: pointer;
     }
-    .panel {
-      padding: 24px;
+    .menu button.active { background: linear-gradient(135deg, rgba(25,211,126,0.18), rgba(16,214,223,0.14)); }
+    .content-area { display: grid; gap: 18px; }
+    .wallet-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .wallet-card { padding: 22px; }
+    .wallet-card .amt { font-size: 34px; font-weight: 900; margin-top: 8px; }
+    .gain { color: #83f5c5; }
+    .loss { color: #ff8b8b; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    th { color: #8ea7c2; font-size: 13px; text-transform: uppercase; letter-spacing: .8px; }
+    .status {
+      display: inline-block; padding: 7px 10px; border-radius: 999px; font-weight: 800; font-size: 12px;
+      background: rgba(25,211,126,0.14); color: #84f5c6;
     }
-    .panel ul {
-      margin: 14px 0 0;
-      padding-left: 18px;
-      color: #c8d6e6;
-      line-height: 1.8;
-    }
-    .promo-card {
-      margin-top: 18px;
-      padding: 22px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      background: linear-gradient(135deg, rgba(25,211,126,0.16), rgba(0,225,255,0.12), rgba(255,255,255,0.04));
-    }
-    .promo-title {
-      font-size: 26px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-    footer {
-      padding: 28px 0 40px;
-      color: #8ea3bb;
-      text-align: center;
-      font-size: 14px;
-    }
-    @media (max-width: 980px) {
-      .hero-grid, .matches, .grid-2 {
-        grid-template-columns: 1fr;
-      }
-      .nav-links {
-        display: none;
-      }
-      .hero-stats {
-        grid-template-columns: 1fr;
-      }
+    .status.pending { background: rgba(255,204,77,0.14); color: #ffd76e; }
+    .status.failed { background: rgba(255,103,103,0.14); color: #ff8d8d; }
+    footer { padding: 32px 0 42px; text-align: center; color: #8ea3bb; }
+    @media (max-width: 1020px) {
+      .hero-grid, .matches, .grid-2, .dashboard-grid, .wallet-grid { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .nav-links { display: none; }
+      .stats { grid-template-columns: 1fr; }
     }
     @media (max-width: 640px) {
-      .brand { font-size: 20px; }
-      .hero-card, .side-card, .panel, .match-card { padding: 18px; }
+      .nav, .nav-actions, .promo { flex-direction: column; align-items: stretch; }
       .odds { grid-template-columns: 1fr; }
-      .promo-card, .nav { flex-direction: column; align-items: stretch; }
-      .nav-actions { justify-content: space-between; }
-      .balance { text-align: center; }
+      .hero-card, .side-card, .match-card, .panel, .auth-card, .wallet-card, .sidebar { padding: 18px; }
+      .brand { font-size: 20px; }
+      .pill { text-align: center; }
     }
   </style>
 </head>
 <body>
   <div class="topbar">
     <div class="container nav">
-      <div class="brand">
+      <div class="brand" onclick="showPage('home')" style="cursor:pointer;">
         <div class="brand-badge">🎯</div>
         <div>Game Of Skills</div>
       </div>
       <div class="nav-links">
-        <a href="#live">Live</a>
-        <a href="#sports">Sports</a>
-        <a href="#promotions">Promotions</a>
-        <a href="#support">Support</a>
+        <a href="#" onclick="showPage('home')">Home</a>
+        <a href="#" onclick="showPage('fantasy')">Fantasy</a>
+        <a href="#" onclick="showPage('dashboard')">Dashboard</a>
+        <a href="#" onclick="showPage('admin')">Admin</a>
       </div>
       <div class="nav-actions">
-        <div class="balance">Wallet: ₹ 24,500</div>
-        <button class="btn btn-dark">Login</button>
-        <button class="btn btn-primary">Register</button>
+        <div class="pill">Demo Wallet: ₹ 24,500</div>
+        <button class="btn btn-dark" onclick="showPage('login')">Login</button>
+        <button class="btn btn-primary" onclick="showPage('register')">Register</button>
       </div>
     </div>
   </div>
 
-  <section class="hero">
-    <div class="container hero-grid">
-      <div class="hero-card">
-        <div class="tag">⚡ Live Odds · Fast Interface · Premium UI</div>
-        <h1>Bet on top matches with a cleaner, stronger look.</h1>
-        <p>
-          A modern betting-style homepage with a premium sports layout, match cards, market odds, wallet preview and strong call-to-action sections.
-        </p>
-        <div class="hero-actions">
-          <button class="btn btn-primary">Start Playing</button>
-          <button class="btn btn-dark">View Matches</button>
-        </div>
-        <div class="hero-stats">
-          <div class="stat-card">
-            <div class="label">Live Matches</div>
-            <div class="value">126+</div>
-          </div>
-          <div class="stat-card">
-            <div class="label">Active Markets</div>
-            <div class="value">580+</div>
-          </div>
-          <div class="stat-card">
-            <div class="label">Winning Odds</div>
-            <div class="value">Up to 3.85</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="side-stack">
-        <div class="side-card" id="live">
-          <h3>Live Now</h3>
-          <p>Running events with active odds updates.</p>
-          <div class="mini-list">
-            <div class="mini-item">
-              <div>
-                <strong>India vs Australia</strong><br>
-                <span class="muted">Cricket · ODI</span>
-              </div>
-              <div class="live-dot"></div>
+  <main>
+    <section id="home" class="page active">
+      <div class="hero">
+        <div class="container hero-grid">
+          <div class="hero-card">
+            <div class="tag">⚡ Premium Demo Interface · Multi Page Layout</div>
+            <h1>A stronger sports demo with dashboard, wallet and admin look.</h1>
+            <p>
+              This is a premium demo app version with homepage, login screen, wallet-style dashboard, history tables, match cards and admin-style pages.
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" onclick="showPage('register')">Create Account</button>
+              <button class="btn btn-dark" onclick="showPage('dashboard')">Open Dashboard</button>
             </div>
-            <div class="mini-item">
-              <div>
-                <strong>Manchester Utd vs Chelsea</strong><br>
-                <span class="muted">Football · EPL</span>
-              </div>
-              <div class="live-dot"></div>
+            <div class="stats">
+              <div class="stat"><small>Live Matches</small><strong>126+</strong></div>
+              <div class="stat"><small>Open Markets</small><strong>580+</strong></div>
+              <div class="stat"><small>Avg Response</small><strong>0.8s</strong></div>
             </div>
-            <div class="mini-item">
-              <div>
-                <strong>Nadal vs Djokovic</strong><br>
-                <span class="muted">Tennis · ATP</span>
+          </div>
+          <div class="stack">
+            <div class="side-card">
+              <h3>Live Now</h3>
+              <div class="muted">Featured events with a polished interface.</div>
+              <div class="mini-list">
+                <div class="mini-item"><div><strong>India vs Australia</strong><br><span class="muted">Cricket · ODI</span></div><div class="live-dot"></div></div>
+                <div class="mini-item"><div><strong>Manchester Utd vs Chelsea</strong><br><span class="muted">Football · EPL</span></div><div class="live-dot"></div></div>
+                <div class="mini-item"><div><strong>Nadal vs Djokovic</strong><br><span class="muted">Tennis · ATP</span></div><div class="live-dot"></div></div>
               </div>
-              <div class="live-dot"></div>
+            </div>
+            <div class="side-card">
+              <h3>Quick Demo Actions</h3>
+              <div class="muted">Navigate through user panel and admin panel layouts.</div>
+              <div class="hero-actions" style="margin-top:16px; margin-bottom:0;">
+                <button class="btn btn-primary" onclick="showPage('dashboard')">User Panel</button>
+                <button class="btn btn-dark" onclick="showPage('admin')">Admin Panel</button>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="side-card">
-          <h3>Quick Actions</h3>
-          <p>Deposit, withdraw and manage account activity from a cleaner panel.</p>
-          <div class="hero-actions" style="margin:18px 0 0;">
-            <button class="btn btn-primary">Deposit</button>
-            <button class="btn btn-dark">Withdraw</button>
+      <section class="section">
+        <div class="container">
+          <div class="section-head">
+            <h2>Featured Matches</h2>
+            <div class="chips">
+              <div class="chip active">All</div>
+              <div class="chip">Cricket</div>
+              <div class="chip">Football</div>
+              <div class="chip">Tennis</div>
+            </div>
+          </div>
+          <div class="matches">
+            <div class="match-card">
+              <div class="league">Cricket</div>
+              <div class="teams">India vs Australia</div>
+              <div class="meta">Today · 7:30 PM · Live Market</div>
+              <div class="odds">
+                <div class="odd"><span>India</span><strong>1.68</strong></div>
+                <div class="odd"><span>Draw</span><strong>2.25</strong></div>
+                <div class="odd"><span>Australia</span><strong>2.84</strong></div>
+              </div>
+              <button class="btn btn-primary place-btn" onclick="showPage('dashboard')">Open Bet Slip Demo</button>
+            </div>
+            <div class="match-card">
+              <div class="league">Football</div>
+              <div class="teams">Manchester Utd vs Chelsea</div>
+              <div class="meta">Today · 10:00 PM · Premier League</div>
+              <div class="odds">
+                <div class="odd"><span>Home</span><strong>2.10</strong></div>
+                <div class="odd"><span>Draw</span><strong>3.05</strong></div>
+                <div class="odd"><span>Away</span><strong>2.72</strong></div>
+              </div>
+              <button class="btn btn-primary place-btn" onclick="showPage('dashboard')">Open Bet Slip Demo</button>
+            </div>
+            <div class="match-card">
+              <div class="league">Tennis</div>
+              <div class="teams">Nadal vs Djokovic</div>
+              <div class="meta">Tomorrow · 5:30 PM · ATP Tour</div>
+              <div class="odds">
+                <div class="odd"><span>Nadal</span><strong>1.95</strong></div>
+                <div class="odd"><span>3 Sets</span><strong>2.40</strong></div>
+                <div class="odd"><span>Djokovic</span><strong>1.88</strong></div>
+              </div>
+              <button class="btn btn-primary place-btn" onclick="showPage('dashboard')">Open Bet Slip Demo</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container grid-2">
+          <div class="panel">
+            <h2>Included Demo Sections</h2>
+            <ul>
+              <li>Premium homepage</li>
+              <li>Login and register screens</li>
+              <li>User dashboard with wallet cards</li>
+              <li>Transaction history table</li>
+              <li>Bet history table</li>
+              <li>Admin overview panel</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h2>Next Upgrade Ideas</h2>
+            <ul>
+              <li>Add brand logo and colors</li>
+              <li>Add separate pages with routing later</li>
+              <li>Connect to backend in future</li>
+              <li>Replace sample matches with live data later</li>
+            </ul>
+            <div class="promo">
+              <div>
+                <div class="promo-title">Premium Demo Ready</div>
+                <div class="muted">A much stronger version than the basic single-page file.</div>
+              </div>
+              <button class="btn btn-primary" onclick="showPage('register')">Try Now</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section id="login" class="page">
+      <div class="container auth-wrap">
+        <div class="auth-card">
+          <h2>Welcome Back</h2>
+          <div class="muted">Demo login screen for your platform.</div>
+          <div class="form-grid">
+            <div><label>Email</label><input type="email" placeholder="Enter your email"></div>
+            <div><label>Password</label><input type="password" placeholder="Enter your password"></div>
+            <button class="btn btn-primary" onclick="showPage('dashboard')">Login</button>
+          </div>
+          <div class="auth-foot">New user? <span class="link-btn" onclick="showPage('register')">Create account</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="register" class="page">
+      <div class="container auth-wrap">
+        <div class="auth-card">
+          <h2>Create Account</h2>
+          <div class="muted">Premium demo registration layout.</div>
+          <div class="form-grid">
+            <div><label>Full Name</label><input type="text" placeholder="Enter full name"></div>
+            <div><label>Email</label><input type="email" placeholder="Enter email"></div>
+            <div><label>Country</label><select><option>United Kingdom</option><option>India</option><option>Other</option></select></div>
+            <div><label>Password</label><input type="password" placeholder="Create password"></div>
+            <button class="btn btn-primary" onclick="showPage('dashboard')">Create Demo Account</button>
+          </div>
+          <div class="auth-foot">Already have one? <span class="link-btn" onclick="showPage('login')">Login</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="fantasy" class="page">
+      <div class="container" style="padding: 28px 0 34px;">
+        <div class="hero-card" style="min-height:auto; margin-bottom:20px;">
+          <div class="tag">🏆 Fantasy Cricket · Interactive Demo</div>
+          <h1 style="font-size: clamp(30px, 5vw, 54px);">Create your fantasy team and track points live-style.</h1>
+          <p>This section works like a playable demo. Select players, stay under the credit cap, choose captain and vice-captain, and see projected fantasy points update instantly.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="resetFantasyTeam()">Reset Team</button>
+            <button class="btn btn-dark" onclick="document.getElementById('fantasy-builder').scrollIntoView({behavior:'smooth'})">Build Team</button>
+          </div>
+          <div class="stats">
+            <div class="stat"><small>Match</small><strong>IND vs AUS</strong></div>
+            <div class="stat"><small>Credit Cap</small><strong>100</strong></div>
+            <div class="stat"><small>Players Allowed</small><strong>11</strong></div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid" style="padding-top:0;">
+          <aside class="sidebar card" id="fantasy-builder">
+            <h3 style="margin:0 0 8px;">Fantasy Summary</h3>
+            <div class="muted">Choose up to 11 players.</div>
+            <div class="menu">
+              <button class="active">Selected: <span id="selectedCount">0</span>/11</button>
+              <button>Credits Used: <span id="creditsUsed">0</span>/100</button>
+              <button>Projected Pts: <span id="projectedPoints">0</span></button>
+              <button>Captain: <span id="captainName">Not set</span></button>
+              <button>Vice-Captain: <span id="viceCaptainName">Not set</span></button>
+            </div>
+            <div class="promo" style="margin-top:18px; padding:18px; display:block;">
+              <div class="promo-title" style="font-size:20px;">Team Rules</div>
+              <div class="muted" style="margin-top:8px;">Pick your 11 players, stay under the budget, and assign C/VC for bonus points.</div>
+            </div>
+          </aside>
+
+          <div class="content-area">
+            <div class="panel">
+              <h2>Fantasy Player Pool</h2>
+              <div class="muted">Tap a player to add or remove them from the team.</div>
+              <div class="matches" style="margin-top:18px; grid-template-columns: repeat(2, 1fr);" id="playerGrid">
+                <div class="match-card fantasy-player" data-name="Rohit Sharma" data-role="BAT" data-team="IND" data-credit="10" data-points="52">
+                  <div class="league">IND · BAT</div>
+                  <div class="teams">Rohit Sharma</div>
+                  <div class="meta">Credits: 10 · Base Pts: 52</div>
+                  <div class="hero-actions" style="margin:0 0 10px;">
+                    <button class="btn btn-dark" onclick="toggleFantasyPlayer(this)">Select</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'captain')">C</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
+                  </div>
+                </div>
+                <div class="match-card fantasy-player" data-name="Virat Kohli" data-role="BAT" data-team="IND" data-credit="9.5" data-points="48">
+                  <div class="league">IND · BAT</div>
+                  <div class="teams">Virat Kohli</div>
+                  <div class="meta">Credits: 9.5 · Base Pts: 48</div>
+                  <div class="hero-actions" style="margin:0 0 10px;">
+                    <button class="btn btn-dark" onclick="toggleFantasyPlayer(this)">Select</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'captain')">C</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
+                  </div>
+                </div>
+                <div class="match-card fantasy-player" data-name="Shubman Gill" data-role="BAT" data-team="IND" data-credit="9" data-points="44">
+                  <div class="league">IND · BAT</div>
+                  <div class="teams">Shubman Gill</div>
+                  <div class="meta">Credits: 9 · Base Pts: 44</div>
+                  <div class="hero-actions" style="margin:0 0 10px;">
+                    <button class="btn btn-dark" onclick="toggleFantasyPlayer(this)">Select</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'captain')">C</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
+                  </div>
+                </div>
+                <div class="match-card fantasy-player" data-name="KL Rahul" data-role="WK" data-team="IND" data-credit="8.5" data-points="38">
+                  <div class="league">IND · WK</div>
+                  <div class="teams">KL Rahul</div>
+                  <div class="meta">Credits: 8.5 · Base Pts: 38</div>
+                  <div class="hero-actions" style="margin:0 0 10px;">
+                    <button class="btn btn-dark" onclick="toggleFantasyPlayer(this)">Select</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'captain')">C</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
+                  </div>
+                </div>
+                <div class="match-card fantasy-player" data-name="Hardik Pandya" data-role="AR" data-team="IND" data-credit="9" data-points="46">
+                  <div class="league">IND · AR</div>
+                  <div class="teams">Hardik Pandya</div>
+                  <div class="meta">Credits: 9 · Base Pts: 46</div>
+                  <div class="hero-actions" style="margin:0 0 10px;">
+                    <button class="btn btn-dark" onclick="toggleFantasyPlayer(this)">Select</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'captain')">C</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
+                  </div>
+                </div>
+                <div class="match-card fantasy-player" data-name="Ravindra Jadeja" data-role="AR" data-team="IND" data-credit="8.5" data-points="42">
+                  <div class="league">IND · AR</div>
+                  <div class="teams">Ravindra Jadeja</div>
+                  <div class="meta">Credits: 8.5 · Base Pts: 42</div>
+                  <div class="hero-actions" style="margin:0 0 10px;">
+                    <button class="btn btn-dark" onclick="toggleFantasyPlayer(this)">Select</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'captain')">C</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
+                  </div>
+                </div>
+                <div class="match-card fantasy-player" data-name="Jasprit Bumrah" data-role="BOWL" data-team="IND" data-credit="9" data-points="50">
+                  <div class="league">IND · BOWL</div>
+                  <div class="teams">Jasprit Bumrah</div>
+                  <div class="meta">Credits: 9 · Base Pts: 50</div>
+                  <div class="hero-actions" style="margin:0 0 10px;">
+                    <button class="btn btn-dark" onclick="toggleFantasyPlayer(this)">Select</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'captain')">C</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
+                  </div>
+                </div>
+                <div class="match-card fantasy-player" data-name="Pat Cummins" data-role="BOWL" data-team="AUS" data-credit="8.5" data-points="41">
+                  <div class="league">AUS · BOWL</div>
+                  <div class="teams">Pat Cummins</div>
+                  <div class="meta">Credits: 8.5 · Base Pts: 41</div>
+                  <div class="hero-actions" style="margin:0 0 10px;">
+                    <button class="btn btn-dark" onclick="toggleFantasyPlayer(this)">Select</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'captain')">C</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
+                  </div>
+                </div>
+                <div class="match-card fantasy-player" data-name="Mitchell Starc" data-role="BOWL" data-team="AUS" data-credit="8.5" data-points="40">
+                  <div class="league">AUS · BOWL</div>
+                  <div class="teams">Mitchell Starc</div>
+                  <div class="meta">Credits: 8.5 · Base Pts: 40</div>
+                  <div class="hero-actions" style="margin:0 0 10px;">
+                    <button class="btn btn-dark" onclick="toggleFantasyPlayer(this)">Select</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'captain')">C</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
+                  </div>
+                </div>
+                <div class="match-card fantasy-player" data-name="David Warner" data-role="BAT" data-team="AUS" data-credit="9" data-points="43">
+                  <div class="league">AUS · BAT</div>
+                  <div class="teams">David Warner</div>
+                  <div class="meta">Credits: 9 · Base Pts: 43</div>
+                  <div class="hero-actions" style="margin:0 0 10px;">
+                    <button class="btn btn-dark" onclick="toggleFantasyPlayer(this)">Select</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'captain')">C</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
+                  </div>
+                </div>
+                <div class="match-card fantasy-player" data-name="Steve Smith" data-role="BAT" data-team="AUS" data-credit="8.5" data-points="39">
+                  <div class="league">AUS · BAT</div>
+                  <div class="teams">Steve Smith</div>
+                  <div class="meta">Credits: 8.5 · Base Pts: 39</div>
+                  <div class="hero-actions" style="margin:0 0 10px;">
+                    <button class="btn btn-dark" onclick="toggleFantasyPlayer(this)">Select</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'captain')">C</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
+                  </div>
+                </div>
+                <div class="match-card fantasy-player" data-name="Glenn Maxwell" data-role="AR" data-team="AUS" data-credit="9" data-points="47">
+                  <div class="league">AUS · AR</div>
+                  <div class="teams">Glenn Maxwell</div>
+                  <div class="meta">Credits: 9 · Base Pts: 47</div>
+                  <div class="hero-actions" style="margin:0 0 10px;">
+                    <button class="btn btn-dark" onclick="toggleFantasyPlayer(this)">Select</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'captain')">C</button>
+                    <button class="btn btn-primary" onclick="setCaptain(this, 'vice')">VC</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <h2>Selected Team</h2>
+              <div class="muted">Your selected fantasy XI will appear here.</div>
+              <table style="margin-top:16px;">
+                <thead><tr><th>Player</th><th>Role</th><th>Credits</th><th>Points</th></tr></thead>
+                <tbody id="selectedTeamBody">
+                  <tr><td colspan="4" class="muted">No players selected yet.</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section" id="sports">
-    <div class="container">
-      <div class="section-head">
-        <h2>Featured Matches</h2>
-        <div class="chips">
-          <div class="chip active">All</div>
-          <div class="chip">Cricket</div>
-          <div class="chip">Football</div>
-          <div class="chip">Tennis</div>
-          <div class="chip">Basketball</div>
+    <section id="dashboard" class="page">
+      <div class="container dashboard-grid">
+        <aside class="sidebar card">
+          <h3 style="margin:0 0 8px;">User Dashboard</h3>
+          <div class="muted">Demo navigation</div>
+          <div class="menu">
+            <button class="active">Overview</button>
+            <button>Wallet</button>
+            <button>Bet History</button>
+            <button>Transactions</button>
+            <button>Profile</button>
+          </div>
+          <div class="promo" style="margin-top:18px; padding:18px; display:block;">
+            <div class="promo-title" style="font-size:20px;">Bet Slip Demo</div>
+            <div class="muted" style="margin:8px 0 14px;">India vs Australia · Stake ₹500 · Return ₹840</div>
+            <button class="btn btn-primary" style="width:100%;">Place Demo Bet</button>
+          </div>
+        </aside>
+
+        <div class="content-area">
+          <div class="wallet-grid">
+            <div class="wallet-card">
+              <div class="muted">Available Balance</div>
+              <div class="amt">₹ 24,500</div>
+            </div>
+            <div class="wallet-card">
+              <div class="muted">This Month Profit</div>
+              <div class="amt gain">₹ 8,250</div>
+            </div>
+            <div class="wallet-card">
+              <div class="muted">Pending Withdrawal</div>
+              <div class="amt" style="color:var(--gold);">₹ 3,000</div>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel">
+              <h2>Recent Transactions</h2>
+              <div class="table-card">
+                <table>
+                  <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+                  <tbody>
+                    <tr><td>25 Mar 2026</td><td>Deposit</td><td>₹ 5,000</td><td><span class="status">Success</span></td></tr>
+                    <tr><td>23 Mar 2026</td><td>Withdrawal</td><td>₹ 3,000</td><td><span class="status pending">Pending</span></td></tr>
+                    <tr><td>21 Mar 2026</td><td>Bonus</td><td>₹ 500</td><td><span class="status">Credited</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h2>Recent Bet History</h2>
+              <div class="table-card">
+                <table>
+                  <thead><tr><th>Match</th><th>Stake</th><th>Return</th><th>Result</th></tr></thead>
+                  <tbody>
+                    <tr><td>India vs Australia</td><td>₹ 500</td><td>₹ 840</td><td><span class="status">Won</span></td></tr>
+                    <tr><td>Man Utd vs Chelsea</td><td>₹ 700</td><td>₹ 0</td><td><span class="status failed">Lost</span></td></tr>
+                    <tr><td>Nadal vs Djokovic</td><td>₹ 400</td><td>₹ 760</td><td><span class="status">Won</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <h2>Open Matches</h2>
+            <div class="matches" style="margin-top:16px;">
+              <div class="match-card">
+                <div class="league">Cricket</div>
+                <div class="teams">India vs Australia</div>
+                <div class="meta">Stake demo · live card</div>
+                <div class="odds">
+                  <div class="odd"><span>India</span><strong>1.68</strong></div>
+                  <div class="odd"><span>Draw</span><strong>2.25</strong></div>
+                  <div class="odd"><span>Australia</span><strong>2.84</strong></div>
+                </div>
+                <button class="btn btn-primary place-btn">Add to Slip</button>
+              </div>
+              <div class="match-card">
+                <div class="league">Football</div>
+                <div class="teams">Arsenal vs Liverpool</div>
+                <div class="meta">Featured market</div>
+                <div class="odds">
+                  <div class="odd"><span>Home</span><strong>2.32</strong></div>
+                  <div class="odd"><span>Draw</span><strong>3.10</strong></div>
+                  <div class="odd"><span>Away</span><strong>2.56</strong></div>
+                </div>
+                <button class="btn btn-primary place-btn">Add to Slip</button>
+              </div>
+              <div class="match-card">
+                <div class="league">Tennis</div>
+                <div class="teams">Sinner vs Alcaraz</div>
+                <div class="meta">Grand Slam market</div>
+                <div class="odds">
+                  <div class="odd"><span>Sinner</span><strong>1.78</strong></div>
+                  <div class="odd"><span>Over</span><strong>2.08</strong></div>
+                  <div class="odd"><span>Alcaraz</span><strong>2.05</strong></div>
+                </div>
+                <button class="btn btn-primary place-btn">Add to Slip</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div class="matches">
-        <div class="match-card">
-          <div class="league">Cricket</div>
-          <div class="teams">India vs Australia</div>
-          <div class="meta">Today · 7:30 PM · Live Market</div>
-          <div class="odds">
-            <div class="odd-box"><div class="odd-label">India</div><div class="odd-value">1.68</div></div>
-            <div class="odd-box"><div class="odd-label">Draw</div><div class="odd-value">2.25</div></div>
-            <div class="odd-box"><div class="odd-label">Australia</div><div class="odd-value">2.84</div></div>
+    <section id="admin" class="page">
+      <div class="container dashboard-grid">
+        <aside class="sidebar card">
+          <h3 style="margin:0 0 8px;">Admin Panel</h3>
+          <div class="muted">Demo admin controls</div>
+          <div class="menu">
+            <button class="active">Overview</button>
+            <button>Users</button>
+            <button>Markets</button>
+            <button>Transactions</button>
+            <button>Reports</button>
           </div>
-          <button class="btn btn-primary place-btn">Place Bet</button>
-        </div>
-
-        <div class="match-card">
-          <div class="league">Football</div>
-          <div class="teams">Manchester Utd vs Chelsea</div>
-          <div class="meta">Today · 10:00 PM · Premier League</div>
-          <div class="odds">
-            <div class="odd-box"><div class="odd-label">Home</div><div class="odd-value">2.10</div></div>
-            <div class="odd-box"><div class="odd-label">Draw</div><div class="odd-value">3.05</div></div>
-            <div class="odd-box"><div class="odd-label">Away</div><div class="odd-value">2.72</div></div>
+        </aside>
+        <div class="content-area">
+          <div class="wallet-grid">
+            <div class="wallet-card"><div class="muted">Total Users</div><div class="amt">12,480</div></div>
+            <div class="wallet-card"><div class="muted">Active Markets</div><div class="amt">580</div></div>
+            <div class="wallet-card"><div class="muted">Pending Requests</div><div class="amt" style="color:var(--gold);">42</div></div>
           </div>
-          <button class="btn btn-primary place-btn">Place Bet</button>
-        </div>
-
-        <div class="match-card">
-          <div class="league">Tennis</div>
-          <div class="teams">Nadal vs Djokovic</div>
-          <div class="meta">Tomorrow · 5:30 PM · ATP Tour</div>
-          <div class="odds">
-            <div class="odd-box"><div class="odd-label">Nadal</div><div class="odd-value">1.95</div></div>
-            <div class="odd-box"><div class="odd-label">Sets 3</div><div class="odd-value">2.40</div></div>
-            <div class="odd-box"><div class="odd-label">Djokovic</div><div class="odd-value">1.88</div></div>
+          <div class="grid-2">
+            <div class="panel">
+              <h2>Latest Users</h2>
+              <table>
+                <thead><tr><th>User</th><th>Country</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>Oliver James</td><td>UK</td><td><span class="status">Active</span></td></tr>
+                  <tr><td>Harry Stone</td><td>UK</td><td><span class="status">Active</span></td></tr>
+                  <tr><td>Amelia Rose</td><td>UK</td><td><span class="status pending">Review</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="panel">
+              <h2>Latest Requests</h2>
+              <table>
+                <thead><tr><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>Withdrawal</td><td>₹ 8,000</td><td><span class="status pending">Pending</span></td></tr>
+                  <tr><td>Deposit</td><td>₹ 15,000</td><td><span class="status">Approved</span></td></tr>
+                  <tr><td>KYC</td><td>-</td><td><span class="status failed">Rejected</span></td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <button class="btn btn-primary place-btn">Place Bet</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container grid-2">
-      <div class="panel">
-        <h2>Why This Version Looks Better</h2>
-        <div class="muted">This layout is designed to feel closer to a real modern sports platform.</div>
-        <ul>
-          <li>Premium hero section with bold first impression</li>
-          <li>Wallet badge, login and register actions in header</li>
-          <li>Cleaner match cards with multiple odds boxes</li>
-          <li>Better spacing, stronger colors and responsive layout</li>
-          <li>Easy to expand later with login, wallet and admin panel</li>
-        </ul>
-      </div>
-      <div class="panel" id="support">
-        <h2>Popular Markets</h2>
-        <ul>
-          <li>Match Winner</li>
-          <li>Over / Under</li>
-          <li>First Innings Runs</li>
-          <li>Both Teams to Score</li>
-          <li>Total Sets / Total Goals</li>
-        </ul>
-        <div class="promo-card" id="promotions">
-          <div>
-            <div class="promo-title">Welcome Bonus</div>
-            <div class="muted">Get premium styled onboarding space for offers and promotions.</div>
+          <div class="panel">
+            <h2>Admin Notes</h2>
+            <ul>
+              <li>This is a visual admin demo section only.</li>
+              <li>You can later split this into separate files or React pages.</li>
+              <li>Brand logo, theme and content can be customized easily.</li>
+            </ul>
           </div>
-          <button class="btn btn-primary">Claim Now</button>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <footer>
-    © 2026 Game Of Skills · Premium sports interface demo
+    © 2026 Game Of Skills · Premium multi-page demo app
   </footer>
+
+  <script>
+    let selectedPlayers = [];
+    let captain = '';
+    let viceCaptain = '';
+
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleFantasyPlayer(button) {
+      const card = button.closest('.fantasy-player');
+      const name = card.dataset.name;
+      const role = card.dataset.role;
+      const credit = parseFloat(card.dataset.credit);
+      const points = parseFloat(card.dataset.points);
+      const exists = selectedPlayers.find(p => p.name === name);
+
+      if (exists) {
+        selectedPlayers = selectedPlayers.filter(p => p.name !== name);
+        if (captain === name) captain = '';
+        if (viceCaptain === name) viceCaptain = '';
+        button.textContent = 'Select';
+        button.classList.remove('btn-red');
+        button.classList.add('btn-dark');
+      } else {
+        const totalCredits = selectedPlayers.reduce((sum, p) => sum + p.credit, 0);
+        if (selectedPlayers.length >= 11) {
+          alert('You can select up to 11 players only.');
+          return;
+        }
+        if (totalCredits + credit > 100) {
+          alert('Credit cap exceeded.');
+          return;
+        }
+        selectedPlayers.push({ name, role, credit, points });
+        button.textContent = 'Remove';
+        button.classList.remove('btn-dark');
+        button.classList.add('btn-red');
+      }
+      renderFantasyTeam();
+    }
+
+    function setCaptain(button, type) {
+      const card = button.closest('.fantasy-player');
+      const name = card.dataset.name;
+      const exists = selectedPlayers.find(p => p.name === name);
+      if (!exists) {
+        alert('Select the player first.');
+        return;
+      }
+      if (type === 'captain') captain = name;
+      if (type === 'vice') viceCaptain = name;
+      renderFantasyTeam();
+    }
+
+    function renderFantasyTeam() {
+      const body = document.getElementById('selectedTeamBody');
+      const selectedCount = document.getElementById('selectedCount');
+      const creditsUsed = document.getElementById('creditsUsed');
+      const projectedPoints = document.getElementById('projectedPoints');
+      const captainName = document.getElementById('captainName');
+      const viceCaptainName = document.getElementById('viceCaptainName');
+
+      selectedCount.textContent = selectedPlayers.length;
+      const credits = selectedPlayers.reduce((sum, p) => sum + p.credit, 0);
+      creditsUsed.textContent = credits;
+
+      let totalPoints = 0;
+      selectedPlayers.forEach(p => {
+        let pts = p.points;
+        if (p.name === captain) pts *= 2;
+        else if (p.name === viceCaptain) pts *= 1.5;
+        totalPoints += pts;
+      });
+      projectedPoints.textContent = totalPoints;
+      captainName.textContent = captain || 'Not set';
+      viceCaptainName.textContent = viceCaptain || 'Not set';
+
+      if (!selectedPlayers.length) {
+        body.innerHTML = '<tr><td colspan="4" class="muted">No players selected yet.</td></tr>';
+        return;
+      }
+
+      body.innerHTML = selectedPlayers.map(p => {
+        let pts = p.points;
+        let label = '';
+        if (p.name === captain) {
+          pts = p.points * 2;
+          label = ' (C)';
+        } else if (p.name === viceCaptain) {
+          pts = p.points * 1.5;
+          label = ' (VC)';
+        }
+        return `<tr><td>${p.name}${label}</td><td>${p.role}</td><td>${p.credit}</td><td>${pts}</td></tr>`;
+      }).join('');
+    }
+
+    function resetFantasyTeam() {
+      selectedPlayers = [];
+      captain = '';
+      viceCaptain = '';
+      document.querySelectorAll('.fantasy-player .btn-red').forEach(btn => {
+        btn.textContent = 'Select';
+        btn.classList.remove('btn-red');
+        btn.classList.add('btn-dark');
+      });
+      renderFantasyTeam();
+    }
+  </script>
 </body>
 </html>
