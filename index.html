@@ -202,7 +202,7 @@
         <a href="#" onclick="showPage('admin')">Admin</a>
       </div>
       <div class="nav-actions">
-        <div class="pill">Demo Wallet: ₹ 24,500</div>
+        <div class="pill">Demo Account</div>
         <button class="btn btn-dark" onclick="showPage('login')">Login</button>
         <button class="btn btn-primary" onclick="showPage('register')">Register</button>
       </div>
@@ -596,25 +596,25 @@
             <button>Profile</button>
           </div>
           <div class="promo" style="margin-top:18px; padding:18px; display:block;">
-            <div class="promo-title" style="font-size:20px;">Bet Slip Demo</div>
-            <div class="muted" style="margin:8px 0 14px;">India vs Australia · Stake ₹500 · Return ₹840</div>
-            <button class="btn btn-primary" style="width:100%;">Place Demo Bet</button>
+            <div class="promo-title" style="font-size:20px;">Team Builder Demo</div>
+            <div class="muted" style="margin:8px 0 14px;">Create your fantasy team, set captain and join a demo contest.</div>
+            <button class="btn btn-primary" style="width:100%;" onclick="showPage('fantasy')">Open Fantasy Section</button>
           </div>
         </aside>
 
         <div class="content-area">
           <div class="wallet-grid">
             <div class="wallet-card">
-              <div class="muted">Available Balance</div>
-              <div class="amt">₹ 24,500</div>
+              <div class="muted">Account Status</div>
+              <div class="amt">Active</div>
             </div>
             <div class="wallet-card">
-              <div class="muted">This Month Profit</div>
-              <div class="amt gain">₹ 8,250</div>
+              <div class="muted">Current Contest</div>
+              <div class="amt gain">IND vs AUS</div>
             </div>
             <div class="wallet-card">
-              <div class="muted">Pending Withdrawal</div>
-              <div class="amt" style="color:var(--gold);">₹ 3,000</div>
+              <div class="muted">Team Progress</div>
+              <div class="amt" style="color:var(--gold);">Draft Ready</div>
             </div>
           </div>
 
@@ -623,25 +623,25 @@
               <h2>Recent Transactions</h2>
               <div class="table-card">
                 <table>
-                  <thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Status</th></tr></thead>
+                  <thead><tr><th>Date</th><th>Activity</th><th>Section</th><th>Status</th></tr></thead>
                   <tbody>
-                    <tr><td>25 Mar 2026</td><td>Deposit</td><td>₹ 5,000</td><td><span class="status">Success</span></td></tr>
-                    <tr><td>23 Mar 2026</td><td>Withdrawal</td><td>₹ 3,000</td><td><span class="status pending">Pending</span></td></tr>
-                    <tr><td>21 Mar 2026</td><td>Bonus</td><td>₹ 500</td><td><span class="status">Credited</span></td></tr>
+                    <tr><td>25 Mar 2026</td><td>Contest Joined</td><td>Mega Contest</td><td><span class="status">Success</span></td></tr>
+                    <tr><td>23 Mar 2026</td><td>Team Edited</td><td>Fantasy XI</td><td><span class="status pending">Updated</span></td></tr>
+                    <tr><td>21 Mar 2026</td><td>Captain Changed</td><td>IND vs AUS</td><td><span class="status">Saved</span></td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
 
             <div class="panel">
-              <h2>Recent Bet History</h2>
+              <h2>Recent Fantasy Activity</h2>
               <div class="table-card">
                 <table>
-                  <thead><tr><th>Match</th><th>Stake</th><th>Return</th><th>Result</th></tr></thead>
+                  <thead><tr><th>Match</th><th>Contest</th><th>Points</th><th>Status</th></tr></thead>
                   <tbody>
-                    <tr><td>India vs Australia</td><td>₹ 500</td><td>₹ 840</td><td><span class="status">Won</span></td></tr>
-                    <tr><td>Man Utd vs Chelsea</td><td>₹ 700</td><td>₹ 0</td><td><span class="status failed">Lost</span></td></tr>
-                    <tr><td>Nadal vs Djokovic</td><td>₹ 400</td><td>₹ 760</td><td><span class="status">Won</span></td></tr>
+                    <tr><td>India vs Australia</td><td>Mega Contest</td><td>312</td><td><span class="status">Live</span></td></tr>
+                    <tr><td>India vs Australia</td><td>Head to Head</td><td>278</td><td><span class="status pending">Pending</span></td></tr>
+                    <tr><td>India vs Australia</td><td>Winner Takes More</td><td>356</td><td><span class="status">Qualified</span></td></tr>
                   </tbody>
                 </table>
               </div>
