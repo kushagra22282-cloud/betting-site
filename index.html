@@ -370,7 +370,7 @@
         <div class="hero-card" style="min-height:auto; margin-bottom:20px;">
           <div class="tag">🏆 Fantasy Cricket · Interactive Demo</div>
           <h1 style="font-size: clamp(30px, 5vw, 54px);">Create your fantasy team and track points live-style.</h1>
-          <p>This section works like a playable demo. Select players, stay under the credit cap, choose captain and vice-captain, and see projected fantasy points update instantly.</p>
+          <p>This section works like a playable demo. Select players, stay under the credit cap, choose captain and vice-captain, join sample contests, and track a leaderboard preview.</p>
           <div class="hero-actions">
             <button class="btn btn-primary" onclick="resetFantasyTeam()">Reset Team</button>
             <button class="btn btn-dark" onclick="document.getElementById('fantasy-builder').scrollIntoView({behavior:'smooth'})">Build Team</button>
@@ -379,6 +379,48 @@
             <div class="stat"><small>Match</small><strong>IND vs AUS</strong></div>
             <div class="stat"><small>Credit Cap</small><strong>100</strong></div>
             <div class="stat"><small>Players Allowed</small><strong>11</strong></div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:18px;">
+          <div class="panel">
+            <h2>Sample Contests</h2>
+            <div class="matches" style="grid-template-columns: 1fr; margin-top:16px;">
+              <div class="match-card">
+                <div class="league">Mega Contest</div>
+                <div class="teams">10,000 Spots · 6,320 Joined</div>
+                <div class="meta">Entry: 49 Coins · 1st Prize: 5,000 Coins</div>
+                <button class="btn btn-primary place-btn" onclick="joinContest('Mega Contest', 49)">Join Demo Contest</button>
+              </div>
+              <div class="match-card">
+                <div class="league">Head to Head</div>
+                <div class="teams">2 Spots · 1 Joined</div>
+                <div class="meta">Entry: 25 Coins · Winner Takes 45 Coins</div>
+                <button class="btn btn-primary place-btn" onclick="joinContest('Head to Head', 25)">Join Demo Contest</button>
+              </div>
+              <div class="match-card">
+                <div class="league">Winner Takes More</div>
+                <div class="teams">100 Spots · 42 Joined</div>
+                <div class="meta">Entry: 99 Coins · Top Prize: 1,200 Coins</div>
+                <button class="btn btn-primary place-btn" onclick="joinContest('Winner Takes More', 99)">Join Demo Contest</button>
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <h2>Leaderboard Preview</h2>
+            <table style="margin-top:16px;">
+              <thead><tr><th>Rank</th><th>User</th><th>Points</th><th>Status</th></tr></thead>
+              <tbody id="leaderboardBody">
+                <tr><td>#1</td><td>OliverJ</td><td>612</td><td><span class="status">Leading</span></td></tr>
+                <tr><td>#2</td><td>HarryS</td><td>598</td><td><span class="status">Hot</span></td></tr>
+                <tr><td>#3</td><td>You</td><td id="yourLeaderboardPoints">0</td><td><span class="status pending">Build Team</span></td></tr>
+                <tr><td>#4</td><td>AmeliaR</td><td>544</td><td><span class="status">Playing</span></td></tr>
+              </tbody>
+            </table>
+            <div class="promo" style="margin-top:18px; padding:18px; display:block;">
+              <div class="promo-title" style="font-size:20px;">Joined Contest</div>
+              <div class="muted" id="joinedContestStatus" style="margin-top:8px;">No contest joined yet.</div>
+            </div>
           </div>
         </div>
 
@@ -786,6 +828,8 @@
         totalPoints += pts;
       });
       projectedPoints.textContent = totalPoints;
+      const yourLeaderboardPoints = document.getElementById('yourLeaderboardPoints');
+      if (yourLeaderboardPoints) yourLeaderboardPoints.textContent = totalPoints;
       captainName.textContent = captain || 'Not set';
       viceCaptainName.textContent = viceCaptain || 'Not set';
 
@@ -817,7 +861,18 @@
         btn.classList.remove('btn-red');
         btn.classList.add('btn-dark');
       });
+      document.getElementById('joinedContestStatus').textContent = 'No contest joined yet.';
       renderFantasyTeam();
+    }
+
+    function joinContest(contestName, entryFee) {
+      if (selectedPlayers.length !== 11) {
+        alert('Please select exactly 11 players before joining a contest.');
+        return;
+      }
+      const text = `Joined ${contestName} with demo entry ${entryFee} coins.`;
+      document.getElementById('joinedContestStatus').textContent = text;
+      alert(text);
     }
   </script>
 </body>
